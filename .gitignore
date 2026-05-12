@@ -1,60 +1,60 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-.eggs/
-.venv/
-venv/
-env/
+# # Python
+# __pycache__/
+# *.pyc
+# *.pyo
+# *.pyd
+# .Python
+# *.egg-info/
+# .eggs/
+# .venv/
+# venv/
+# env/
 
-# Jupyter
-.ipynb_checkpoints/
+# # Jupyter
+# .ipynb_checkpoints/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# # IDE
+# .vscode/
+# .idea/
+# *.swp
+# *.swo
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
+# # OS
+# .DS_Store
+# Thumbs.db
+# desktop.ini
 
-# Secrets / config
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-secrets/
+# # Secrets / config
+# .env
+# .env.*
+# !.env.example
+# *.pem
+# *.key
+# secrets/
 
-# Data — keep folder structure but never commit raw data
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-*.csv.zip
+# # Data — keep folder structure but never commit raw data
+# data/raw/*
+# data/processed/*
+# !data/raw/.gitkeep
+# !data/processed/.gitkeep
+# *.csv.zip
 
-# ML artifacts
-ml/models/*.pkl
-ml/models/*.joblib
-ml/models/*.h5
-ml/models/*.pt
-ml/models/*.onnx
-!ml/models/.gitkeep
+# # ML artifacts
+# ml/models/*.pkl
+# ml/models/*.joblib
+# ml/models/*.h5
+# ml/models/*.pt
+# ml/models/*.onnx
+# !ml/models/.gitkeep
 
-# Docker / infra
-infrastructure/.volumes/
-*.log
+# # Docker / infra
+# infrastructure/.volumes/
+# *.log
 
-# Tableau
-*.twbx
-dashboards/cache/
+# # Tableau
+# *.twbx
+# dashboards/cache/
 
-# Build / dist
-build/
-dist/
+# # Build / dist
+# build/
+# dist/
