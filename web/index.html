@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPredict — Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; }
+        .nav-btn.active { background: #2563eb; color: white; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .status-running { background: #22c55e; }
+        .status-stopped { background: #ef4444; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .progress-bar { height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+        th { background: #f9fafb; font-weight: 600; color: #374151; }
+        tr:hover { background: #f3f4f6; }
+        .badge { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-yellow { background: #fef9c3; color: #854d0e; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-gray { background: #f3f4f6; color: #374151; }
+        .log-box { background: #1e1e1e; color: #d4d4d4; font-family: 'Consolas', monospace; font-size: 13px;
+                   padding: 16px; border-radius: 8px; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- ── Top Bar ── -->
+<header class="bg-white shadow-sm border-b px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">E</div>
+        <div>
+            <h1 class="text-lg font-bold text-gray-800">EduPredict Dashboard</h1>
+            <p class="text-xs text-gray-500">Big Data + Predictive Analytics for Education</p>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <div id="service-indicators" class="flex gap-2"></div>
+        <span class="text-xs text-gray-400" id="clock"></span>
+    </div>
+</header>
+
+<div class="flex">
+    <!-- ── Sidebar ── -->
+    <nav class="w-56 bg-white min-h-screen shadow-sm border-r p-4 flex flex-col gap-1 sticky top-14 h-[calc(100vh-56px)]">
+        <button class="nav-btn active text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="overview">Overview</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="students">Students</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="dropout">Dropout Risk</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="courses">Course Demand</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="anomalies">Anomalies</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="models">ML Models</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="pipeline">Pipeline</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="rstats">R Analytics</button>
+        <button class="nav-btn text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition" data-section="team">Team Progress</button>
+        <div class="mt-auto pt-4 border-t text-xs text-gray-400 text-center">
+            Sem-6 eProject<br>May 2026
+        </div>
+    </nav>
+
+    <!-- ── Main Content ── -->
+    <main class="flex-1 p-6 max-w-[1200px]">
+
+        <!-- OVERVIEW -->
+        <div id="sec-overview" class="section active">
+            <h2 class="text-xl font-bold mb-4">Overview</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="card text-center">
+                    <p class="text-3xl font-bold text-blue-600" id="stat-students">--</p>
+                    <p class="text-sm text-gray-500">Total Students</p>
+                </div>
+                <div class="card text-center">
+                    <p class="text-3xl font-bold text-red-500" id="stat-dropout">--</p>
+                    <p class="text-sm text-gray-500">Dropout Risk</p>
+                </div>
+                <div class="card text-center">
+                    <p class="text-3xl font-bold text-yellow-500" id="stat-anomaly">--</p>
+                    <p class="text-sm text-gray-500">Anomalies</p>
+                </div>
+                <div class="card text-center">
+                    <p class="text-3xl font-bold text-green-600" id="stat-attendance">--</p>
+                    <p class="text-sm text-gray-500">Avg Attendance</p>
+                </div>
+            </div>
+            <!-- Service Status -->
+            <div class="card mb-6">
+                <h3 class="font-semibold mb-3">Service Status</h3>
+                <div id="service-table" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+            <!-- Department chart -->
+            <div class="card">
+                <h3 class="font-semibold mb-3">Students per Department</h3>
+                <canvas id="chart-dept" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- STUDENTS -->
+        <div id="sec-students" class="section">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold">Students</h2>
+                <div class="flex gap-2">
+                    <input id="student-search" type="text" placeholder="Search by ID..." class="border rounded-lg px-3 py-1.5 text-sm w-48">
+                    <select id="student-dept" class="border rounded-lg px-3 py-1.5 text-sm">
+                        <option value="">All Departments</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Department</th><th>GPA</th><th>Attendance</th><th>LMS Time</th><th>Risk</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="students-tbody"></tbody>
+                </table>
+                <div class="flex items-center justify-between mt-4">
+                    <span class="text-sm text-gray-500" id="students-info"></span>
+                    <div class="flex gap-2">
+                        <button id="prev-page" class="px-3 py-1 border rounded text-sm" disabled>Prev</button>
+                        <button id="next-page" class="px-3 py-1 border rounded text-sm">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DROPOUT RISK -->
+        <div id="sec-dropout" class="section">
+            <h2 class="text-xl font-bold mb-4">Dropout Risk Students</h2>
+            <div class="card overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Department</th><th>GPA</th><th>Attendance</th><th>Avg Grade</th><th>LMS Time</th></tr>
+                    </thead>
+                    <tbody id="dropout-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- COURSE DEMAND -->
+        <div id="sec-courses" class="section">
+            <h2 class="text-xl font-bold mb-4">Course Demand Forecast</h2>
+            <div class="card mb-6">
+                <canvas id="chart-demand" height="250"></canvas>
+            </div>
+            <div class="card overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr><th>Course</th><th>Department</th><th>Credits</th><th>Capacity</th><th>Enrolled</th><th>Fill %</th></tr>
+                    </thead>
+                    <tbody id="courses-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ANOMALIES -->
+        <div id="sec-anomalies" class="section">
+            <h2 class="text-xl font-bold mb-4">Anomaly Detection</h2>
+            <p class="text-sm text-gray-500 mb-4">Students flagged by Isolation Forest as having unusual behavior patterns.</p>
+            <div class="card overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Attendance</th><th>Avg Grade</th><th>LMS Time</th><th>Logins</th><th>Assignments</th></tr>
+                    </thead>
+                    <tbody id="anomalies-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ML MODELS -->
+        <div id="sec-models" class="section">
+            <h2 class="text-xl font-bold mb-4">ML Model Performance</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="card">
+                    <h4 class="font-semibold text-blue-600 mb-2">Student Performance</h4>
+                    <p class="text-sm text-gray-500">Random Forest Regressor</p>
+                    <div id="model-perf" class="mt-3 space-y-2"></div>
+                </div>
+                <div class="card">
+                    <h4 class="font-semibold text-red-500 mb-2">Dropout Risk</h4>
+                    <p class="text-sm text-gray-500">Gradient Boosting Classifier</p>
+                    <div id="model-dropout" class="mt-3 space-y-2"></div>
+                </div>
+                <div class="card">
+                    <h4 class="font-semibold text-green-600 mb-2">Course Demand</h4>
+                    <p class="text-sm text-gray-500">Random Forest Regressor</p>
+                    <div id="model-demand" class="mt-3 space-y-2"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="font-semibold mb-2">Anomaly Detection</h3>
+                <p class="text-sm text-gray-500">Isolation Forest</p>
+                <p class="mt-2 text-lg font-bold" id="model-anomaly-count">--</p>
+            </div>
+        </div>
+
+        <!-- PIPELINE -->
+        <div id="sec-pipeline" class="section">
+            <h2 class="text-xl font-bold mb-4">Data Pipeline</h2>
+            <div class="card mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold">Pipeline Steps</h3>
+                    <button id="btn-run-pipeline" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+                        Re-run Pipeline
+                    </button>
+                </div>
+                <div id="pipeline-steps" class="space-y-3"></div>
+            </div>
+            <div class="card">
+                <h3 class="font-semibold mb-2">Pipeline Logs</h3>
+                <div id="pipeline-logs" class="log-box">Waiting for pipeline data...</div>
+            </div>
+        </div>
+
+        <!-- R ANALYTICS -->
+        <div id="sec-rstats" class="section">
+            <h2 class="text-xl font-bold mb-4">R Analytics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="card">
+                    <h3 class="font-semibold mb-3">Statistical Summary</h3>
+                    <div id="r-summary" class="text-sm space-y-2">Loading...</div>
+                </div>
+                <div class="card">
+                    <h3 class="font-semibold mb-3">Correlation Matrix</h3>
+                    <div id="r-correlation" class="overflow-x-auto text-sm">Loading...</div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="font-semibold mb-3">Department Comparison</h3>
+                <div id="r-departments" class="overflow-x-auto">Loading...</div>
+            </div>
+        </div>
+
+        <!-- TEAM PROGRESS -->
+        <div id="sec-team" class="section">
+            <h2 class="text-xl font-bold mb-4">Team Progress</h2>
+            <div id="team-cards" class="space-y-4"></div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+// ── Config ──
+const API = '/api';  // proxied through nginx
+
+// ── Navigation ──
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('sec-' + btn.dataset.section).classList.add('active');
+    });
+});
+
+// ── Clock ──
+setInterval(() => {
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+}, 1000);
+
+// ── Fetch helper ──
+async function api(path) {
+    try {
+        const res = await fetch(API + path);
+        return await res.json();
+    } catch (e) { return null; }
+}
+
+// ── Services Status ──
+async function loadServices() {
+    const data = await api('/services');
+    if (!data) return;
+    const container = document.getElementById('service-table');
+    const indicators = document.getElementById('service-indicators');
+    container.innerHTML = '';
+    indicators.innerHTML = '';
+    data.forEach(s => {
+        const isUp = s.status === 'running';
+        container.innerHTML += `
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-gray-50">
+                <span class="status-dot ${isUp ? 'status-running' : 'status-stopped'}"></span>
+                <span class="text-sm font-medium">${s.name}</span>
+                <span class="text-xs text-gray-400 ml-auto">:${s.port}</span>
+            </div>`;
+        indicators.innerHTML += `<span class="status-dot ${isUp ? 'status-running' : 'status-stopped'}" title="${s.name}: ${s.status}"></span>`;
+    });
+}
+
+// ── Dashboard Overview ──
+let deptChart = null;
+async function loadDashboard() {
+    const data = await api('/dashboard');
+    if (!data) return;
+    document.getElementById('stat-students').textContent = data.total_students || '--';
+    document.getElementById('stat-dropout').textContent = data.dropout_risk_count || '--';
+    document.getElementById('stat-anomaly').textContent = data.anomaly_count || '--';
+    document.getElementById('stat-attendance').textContent = (data.avg_attendance || '--') + '%';
+
+    // Department chart
+    if (data.departments && Object.keys(data.departments).length > 0) {
+        const labels = Object.keys(data.departments);
+        const values = Object.values(data.departments);
+        const ctx = document.getElementById('chart-dept').getContext('2d');
+        if (deptChart) deptChart.destroy();
+        deptChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Students', data: values,
+                    backgroundColor: ['#3b82f6','#ef4444','#f59e0b','#22c55e','#8b5cf6'] }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+    }
+}
+
+// ── Students Table ──
+let currentPage = 1;
+async function loadStudents() {
+    const search = document.getElementById('student-search').value;
+    const dept = document.getElementById('student-dept').value;
+    const data = await api(`/students?page=${currentPage}&limit=15&search=${search}&department=${dept}`);
+    if (!data) return;
+    const tbody = document.getElementById('students-tbody');
+    tbody.innerHTML = '';
+    data.students.forEach(s => {
+        const riskBadge = s.predicted_risk === 'High'
+            ? '<span class="badge badge-red">High</span>'
+            : '<span class="badge badge-green">Low</span>';
+        const statusBadge = s.is_active
+            ? '<span class="badge badge-green">Active</span>'
+            : '<span class="badge badge-gray">Inactive</span>';
+        tbody.innerHTML += `<tr>
+            <td class="font-mono text-sm">${s.student_id}</td>
+            <td>${s.department || '-'}</td>
+            <td>${(s.cumulative_gpa || 0).toFixed(2)}</td>
+            <td>${((s.attendance_rate || 0) * 100).toFixed(0)}%</td>
+            <td>${(s.avg_lms_time || 0).toFixed(0)} min</td>
+            <td>${riskBadge}</td>
+            <td>${statusBadge}</td>
+        </tr>`;
+    });
+    document.getElementById('students-info').textContent = `Page ${data.page} of ${data.pages} (${data.total} students)`;
+    document.getElementById('prev-page').disabled = data.page <= 1;
+    document.getElementById('next-page').disabled = data.page >= data.pages;
+}
+
+document.getElementById('prev-page').addEventListener('click', () => { currentPage--; loadStudents(); });
+document.getElementById('next-page').addEventListener('click', () => { currentPage++; loadStudents(); });
+document.getElementById('student-search').addEventListener('input', () => { currentPage = 1; loadStudents(); });
+document.getElementById('student-dept').addEventListener('change', () => { currentPage = 1; loadStudents(); });
+
+// Populate department filter
+async function loadDeptFilter() {
+    const data = await api('/dashboard');
+    if (!data || !data.departments) return;
+    const sel = document.getElementById('student-dept');
+    Object.keys(data.departments).forEach(d => {
+        sel.innerHTML += `<option value="${d}">${d}</option>`;
+    });
+}
+
+// ── Dropout Risk ──
+async function loadDropout() {
+    const data = await api('/dropout-risk');
+    if (!data) return;
+    const tbody = document.getElementById('dropout-tbody');
+    tbody.innerHTML = '';
+    data.students.forEach(s => {
+        tbody.innerHTML += `<tr class="bg-red-50">
+            <td class="font-mono text-sm">${s.student_id}</td>
+            <td>${s.department || '-'}</td>
+            <td class="font-bold text-red-600">${(s.cumulative_gpa || 0).toFixed(2)}</td>
+            <td>${((s.attendance_rate || 0) * 100).toFixed(0)}%</td>
+            <td>${(s.avg_grade || 0).toFixed(2)}</td>
+            <td>${(s.avg_lms_time || 0).toFixed(0)} min</td>
+        </tr>`;
+    });
+}
+
+// ── Course Demand ──
+let demandChart = null;
+async function loadCourses() {
+    const data = await api('/courses');
+    const demand = await api('/courses/demand');
+    if (data && data.courses) {
+        const tbody = document.getElementById('courses-tbody');
+        tbody.innerHTML = '';
+        data.courses.slice(0, 50).forEach(c => {
+            const fill = c.capacity > 0 ? ((c.enrolled_count / c.capacity) * 100).toFixed(0) : 0;
+            const fillColor = fill > 80 ? 'text-red-600 font-bold' : fill > 50 ? 'text-yellow-600' : 'text-green-600';
+            tbody.innerHTML += `<tr>
+                <td>${c.course_id} - ${c.course_name}</td>
+                <td>${c.department}</td>
+                <td>${c.credits}</td>
+                <td>${c.capacity}</td>
+                <td>${c.enrolled_count}</td>
+                <td class="${fillColor}">${fill}%</td>
+            </tr>`;
+        });
+    }
+    if (demand && demand.demand) {
+        const depts = [...new Set(demand.demand.map(d => d.department))];
+        const periods = [...new Set(demand.demand.map(d => d.period_num))].sort();
+        const colors = ['#3b82f6','#ef4444','#f59e0b','#22c55e','#8b5cf6'];
+        const datasets = depts.map((dept, i) => ({
+            label: dept,
+            data: periods.map(p => {
+                const row = demand.demand.find(d => d.department === dept && d.period_num === p);
+                return row ? row.total_enrolled : 0;
+            }),
+            borderColor: colors[i % colors.length],
+            tension: 0.3,
+            fill: false,
+        }));
+        const ctx = document.getElementById('chart-demand').getContext('2d');
+        if (demandChart) demandChart.destroy();
+        demandChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: periods.map(p => 'Period ' + p), datasets },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Enrollment Trend by Department' } } }
+        });
+    }
+}
+
+// ── Anomalies ──
+async function loadAnomalies() {
+    const data = await api('/anomalies');
+    if (!data) return;
+    const tbody = document.getElementById('anomalies-tbody');
+    tbody.innerHTML = '';
+    data.students.forEach(s => {
+        tbody.innerHTML += `<tr class="bg-yellow-50">
+            <td class="font-mono text-sm">${s.student_id}</td>
+            <td>${((s.attendance_rate || 0) * 100).toFixed(0)}%</td>
+            <td>${(s.avg_grade || 0).toFixed(2)}</td>
+            <td>${(s.avg_lms_time || 0).toFixed(0)} min</td>
+            <td>${(s.avg_logins || 0).toFixed(1)}</td>
+            <td>${(s.avg_assignments || 0).toFixed(1)}</td>
+        </tr>`;
+    });
+}
+
+// ── ML Models ──
+function metricBar(label, value, max, color) {
+    const pct = Math.min(100, (value / max) * 100);
+    return `<div>
+        <div class="flex justify-between text-sm"><span>${label}</span><span class="font-bold">${value.toFixed(4)}</span></div>
+        <div class="progress-bar mt-1"><div class="progress-fill bg-${color}-500" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
+async function loadModels() {
+    const data = await api('/models');
+    if (!data) return;
+    const perf = document.getElementById('model-perf');
+    const drop = document.getElementById('model-dropout');
+    const dem = document.getElementById('model-demand');
+
+    if (data.performance_model) {
+        const m = data.performance_model;
+        perf.innerHTML = metricBar('R² Score', m.r2, 1, 'blue') +
+            metricBar('MAE', m.mae, 1, 'blue') + metricBar('RMSE', m.rmse, 1, 'blue');
+    }
+    if (data.dropout_model) {
+        const m = data.dropout_model;
+        drop.innerHTML = metricBar('Accuracy', m.accuracy, 1, 'red') +
+            metricBar('Precision', m.precision, 1, 'red') + metricBar('Recall', m.recall, 1, 'red') +
+            metricBar('F1 Score', m.f1, 1, 'red');
+    }
+    if (data.demand_model) {
+        const m = data.demand_model;
+        dem.innerHTML = metricBar('R² Score', m.r2, 1, 'green') +
+            metricBar('MAE', m.mae, 30, 'green') + metricBar('RMSE', m.rmse, 30, 'green');
+    }
+    if (data.anomalies_found !== undefined) {
+        document.getElementById('model-anomaly-count').textContent = data.anomalies_found + ' anomalies detected';
+    }
+}
+
+// ── Pipeline ──
+async function loadPipeline() {
+    const data = await api('/pipeline');
+    if (!data) return;
+    const steps = [
+        { key: 'data_generated', label: 'Data Generation', desc: '500 students, 5 datasets' },
+        { key: 'data_ingested', label: 'MongoDB Ingestion', desc: 'Load CSVs into MongoDB' },
+        { key: 'preprocessed', label: 'Preprocessing', desc: 'Feature engineering' },
+        { key: 'performance_model', label: 'Performance Model', desc: 'Train Random Forest' },
+        { key: 'dropout_model', label: 'Dropout Model', desc: 'Train Gradient Boosting' },
+        { key: 'demand_model', label: 'Demand Model', desc: 'Train Random Forest' },
+        { key: 'anomaly_detection', label: 'Anomaly Detection', desc: 'Isolation Forest' },
+    ];
+    const container = document.getElementById('pipeline-steps');
+    container.innerHTML = '';
+    steps.forEach((step, i) => {
+        const done = data[step.key];
+        const isRunning = data.pipeline_running && !done && (i === 0 || data[steps[i-1]?.key]);
+        let badge = done ? '<span class="badge badge-green">Done</span>'
+            : isRunning ? '<span class="badge badge-yellow">Running...</span>'
+            : '<span class="badge badge-gray">Pending</span>';
+        container.innerHTML += `
+            <div class="flex items-center gap-3 p-3 rounded-lg ${done ? 'bg-green-50' : isRunning ? 'bg-yellow-50' : 'bg-gray-50'}">
+                <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${done ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}">${i+1}</span>
+                <div class="flex-1">
+                    <p class="font-medium text-sm">${step.label}</p>
+                    <p class="text-xs text-gray-500">${step.desc}</p>
+                </div>
+                ${badge}
+            </div>`;
+    });
+
+    // Logs
+    const logBox = document.getElementById('pipeline-logs');
+    if (data.logs && data.logs.length > 0) {
+        logBox.innerHTML = data.logs.map(l => `<div>${l}</div>`).join('');
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // Button state
+    const btn = document.getElementById('btn-run-pipeline');
+    btn.disabled = data.pipeline_running;
+    btn.textContent = data.pipeline_running ? 'Pipeline Running...' : 'Re-run Pipeline';
+}
+
+document.getElementById('btn-run-pipeline').addEventListener('click', async () => {
+    await fetch(API + '/pipeline/run', { method: 'POST' });
+    loadPipeline();
+});
+
+// ── R Analytics ──
+async function loadRStats() {
+    // Summary
+    const summary = await api('/r/summary');
+    const sumDiv = document.getElementById('r-summary');
+    if (summary && summary.summary) {
+        let html = '<table class="w-full"><thead><tr><th>Variable</th><th>Mean</th><th>Median</th><th>Std</th><th>Min</th><th>Max</th></tr></thead><tbody>';
+        for (const [key, val] of Object.entries(summary.summary)) {
+            html += `<tr><td class="font-mono">${key}</td><td>${val.mean}</td><td>${val.median}</td><td>${val.std}</td><td>${val.min}</td><td>${val.max}</td></tr>`;
+        }
+        html += '</tbody></table>';
+        sumDiv.innerHTML = html;
+    } else {
+        sumDiv.innerHTML = '<p class="text-gray-400">Pipeline not ready yet.</p>';
+    }
+
+    // Correlation
+    const corr = await api('/r/correlation');
+    const corrDiv = document.getElementById('r-correlation');
+    if (corr && corr.columns) {
+        let html = '<table class="w-full text-xs"><thead><tr><th></th>';
+        corr.columns.forEach(c => html += `<th class="font-mono">${c.replace('avg_','')}</th>`);
+        html += '</tr></thead><tbody>';
+        if (Array.isArray(corr.matrix)) {
+            corr.matrix.forEach((row, i) => {
+                html += `<tr><td class="font-mono font-bold">${corr.columns[i].replace('avg_','')}</td>`;
+                row.forEach(val => {
+                    const bg = val > 0.5 ? 'bg-blue-100' : val < -0.3 ? 'bg-red-100' : '';
+                    html += `<td class="${bg}">${val}</td>`;
+                });
+                html += '</tr>';
+            });
+        } else {
+            corr.columns.forEach((col, i) => {
+                html += `<tr><td class="font-mono font-bold">${col.replace('avg_','')}</td>`;
+                corr.columns.forEach(c2 => {
+                    const val = corr.matrix[c2] ? (Array.isArray(corr.matrix[c2]) ? corr.matrix[c2][i] : corr.matrix[c2]) : '-';
+                    html += `<td>${typeof val === 'number' ? val.toFixed(3) : val}</td>`;
+                });
+                html += '</tr>';
+            });
+        }
+        html += '</tbody></table>';
+        corrDiv.innerHTML = html;
+    }
+
+    // Department stats
+    const dept = await api('/r/department-stats');
+    const deptDiv = document.getElementById('r-departments');
+    if (dept && dept.stats) {
+        let html = '<table><thead><tr><th>Department</th><th>Count</th><th>Avg GPA</th><th>Avg Attendance</th><th>Dropout Rate</th></tr></thead><tbody>';
+        const stats = Array.isArray(dept.stats) ? dept.stats : Object.values(dept.stats);
+        stats.forEach(s => {
+            const dr = (s.dropout_rate * 100).toFixed(1);
+            html += `<tr>
+                <td class="font-medium">${s.department}</td>
+                <td>${s.count}</td>
+                <td>${(s.avg_gpa || 0).toFixed(2)}</td>
+                <td>${((s.avg_attendance || 0) * 100).toFixed(0)}%</td>
+                <td class="${s.dropout_rate > 0.15 ? 'text-red-600 font-bold' : ''}">${dr}%</td>
+            </tr>`;
+        });
+        html += '</tbody></table>';
+        deptDiv.innerHTML = html;
+    }
+}
+
+// ── Team Progress ──
+async function loadTeam() {
+    const data = await api('/team');
+    if (!data) return;
+    const container = document.getElementById('team-cards');
+    container.innerHTML = '';
+    data.members.forEach(member => {
+        const done = member.tasks.filter(t => t.status === 'done').length;
+        const total = member.tasks.length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const roleColor = member.role === 'Lead' ? 'blue' : member.role.includes('Buffer') ? 'yellow' : 'gray';
+
+        let tasksHtml = member.tasks.map(t => `
+            <div class="flex items-center gap-2 text-sm py-1">
+                <span class="${t.status === 'done' ? 'text-green-500' : 'text-gray-300'}">${t.status === 'done' ? '&#10003;' : '&#9675;'}</span>
+                <span class="${t.status === 'done' ? 'text-gray-700' : 'text-gray-400'}">${t.task}</span>
+                <span class="text-xs text-gray-400 ml-auto">${t.folder}</span>
+            </div>`).join('');
+
+        container.innerHTML += `
+            <div class="card">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold">${member.name}</h3>
+                        <p class="text-sm text-gray-500">${member.focus}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="badge badge-${roleColor}">${member.role} — ${member.share}</span>
+                        <p class="text-sm font-bold mt-1">${pct}% complete</p>
+                    </div>
+                </div>
+                <div class="progress-bar mb-3">
+                    <div class="progress-fill bg-${roleColor === 'blue' ? 'blue' : roleColor === 'yellow' ? 'yellow' : 'gray'}-500" style="width:${pct}%"></div>
+                </div>
+                ${tasksHtml}
+            </div>`;
+    });
+}
+
+// ── Init: load everything ──
+async function init() {
+    loadServices();
+    loadDashboard();
+    loadDeptFilter();
+    loadStudents();
+    loadDropout();
+    loadCourses();
+    loadAnomalies();
+    loadModels();
+    loadPipeline();
+    loadRStats();
+    loadTeam();
+}
+
+// Load on page ready, then refresh periodically
+init();
+setInterval(() => {
+    loadServices();
+    loadPipeline();
+}, 10000);  // refresh services & pipeline every 10s
+</script>
+</body>
+</html>
