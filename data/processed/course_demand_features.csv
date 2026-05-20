@@ -1,0 +1,115 @@
+course_id,course_name,department,credits,capacity,semester,year,enrolled_count,period_num,dept_encoded,course_encoded
+CS101,Intro to Programming,Computer Science,3,60,Fall,2023,29,4046,1,4
+CS101,Intro to Programming,Computer Science,3,60,Spring,2023,31,4047,1,4
+CS101,Intro to Programming,Computer Science,3,60,Fall,2024,34,4048,1,4
+CS101,Intro to Programming,Computer Science,3,60,Spring,2024,34,4049,1,4
+CS101,Intro to Programming,Computer Science,3,60,Fall,2025,43,4050,1,4
+CS101,Intro to Programming,Computer Science,3,60,Spring,2025,49,4051,1,4
+CS201,Data Structures,Computer Science,3,100,Fall,2023,56,4046,1,5
+CS201,Data Structures,Computer Science,3,100,Spring,2023,66,4047,1,5
+CS201,Data Structures,Computer Science,3,100,Fall,2024,73,4048,1,5
+CS201,Data Structures,Computer Science,3,100,Spring,2024,69,4049,1,5
+CS201,Data Structures,Computer Science,3,100,Fall,2025,71,4050,1,5
+CS201,Data Structures,Computer Science,3,100,Spring,2025,77,4051,1,5
+CS301,Databases,Computer Science,4,100,Fall,2023,40,4046,1,6
+CS301,Databases,Computer Science,4,100,Spring,2023,45,4047,1,6
+CS301,Databases,Computer Science,4,100,Fall,2024,54,4048,1,6
+CS301,Databases,Computer Science,4,100,Spring,2024,55,4049,1,6
+CS301,Databases,Computer Science,4,100,Fall,2025,61,4050,1,6
+CS301,Databases,Computer Science,4,100,Spring,2025,50,4051,1,6
+CS401,Machine Learning,Computer Science,4,100,Fall,2023,61,4046,1,7
+CS401,Machine Learning,Computer Science,4,100,Spring,2023,59,4047,1,7
+CS401,Machine Learning,Computer Science,4,100,Fall,2024,72,4048,1,7
+CS401,Machine Learning,Computer Science,4,100,Spring,2024,68,4049,1,7
+CS401,Machine Learning,Computer Science,4,100,Fall,2025,68,4050,1,7
+CS401,Machine Learning,Computer Science,4,100,Spring,2025,80,4051,1,7
+CS501,Big Data,Computer Science,3,60,Fall,2023,48,4046,1,8
+CS501,Big Data,Computer Science,3,60,Spring,2023,50,4047,1,8
+CS501,Big Data,Computer Science,3,60,Fall,2024,57,4048,1,8
+CS501,Big Data,Computer Science,3,60,Spring,2024,60,4049,1,8
+CS501,Big Data,Computer Science,3,60,Fall,2025,59,4050,1,8
+CS501,Big Data,Computer Science,3,60,Spring,2025,60,4051,1,8
+MT101,Calculus I,Mathematics,4,100,Fall,2023,42,4046,3,12
+MT101,Calculus I,Mathematics,4,100,Spring,2023,51,4047,3,12
+MT101,Calculus I,Mathematics,4,100,Fall,2024,49,4048,3,12
+MT101,Calculus I,Mathematics,4,100,Spring,2024,56,4049,3,12
+MT101,Calculus I,Mathematics,4,100,Fall,2025,62,4050,3,12
+MT101,Calculus I,Mathematics,4,100,Spring,2025,55,4051,3,12
+MT201,Linear Algebra,Mathematics,4,60,Fall,2023,44,4046,3,13
+MT201,Linear Algebra,Mathematics,4,60,Spring,2023,44,4047,3,13
+MT201,Linear Algebra,Mathematics,4,60,Fall,2024,50,4048,3,13
+MT201,Linear Algebra,Mathematics,4,60,Spring,2024,46,4049,3,13
+MT201,Linear Algebra,Mathematics,4,60,Fall,2025,50,4050,3,13
+MT201,Linear Algebra,Mathematics,4,60,Spring,2025,57,4051,3,13
+MT301,Statistics,Mathematics,3,60,Fall,2023,60,4046,3,14
+MT301,Statistics,Mathematics,3,60,Spring,2023,60,4047,3,14
+MT301,Statistics,Mathematics,3,60,Fall,2024,60,4048,3,14
+MT301,Statistics,Mathematics,3,60,Spring,2024,60,4049,3,14
+MT301,Statistics,Mathematics,3,60,Fall,2025,60,4050,3,14
+MT301,Statistics,Mathematics,3,60,Spring,2025,60,4051,3,14
+MT401,Discrete Math,Mathematics,4,60,Fall,2023,29,4046,3,15
+MT401,Discrete Math,Mathematics,4,60,Spring,2023,37,4047,3,15
+MT401,Discrete Math,Mathematics,4,60,Fall,2024,48,4048,3,15
+MT401,Discrete Math,Mathematics,4,60,Spring,2024,46,4049,3,15
+MT401,Discrete Math,Mathematics,4,60,Fall,2025,47,4050,3,15
+MT401,Discrete Math,Mathematics,4,60,Spring,2025,54,4051,3,15
+PH101,Mechanics,Physics,3,80,Fall,2023,30,4046,4,16
+PH101,Mechanics,Physics,3,80,Spring,2023,34,4047,4,16
+PH101,Mechanics,Physics,3,80,Fall,2024,41,4048,4,16
+PH101,Mechanics,Physics,3,80,Spring,2024,41,4049,4,16
+PH101,Mechanics,Physics,3,80,Fall,2025,39,4050,4,16
+PH101,Mechanics,Physics,3,80,Spring,2025,48,4051,4,16
+PH201,Electromagnetism,Physics,4,100,Fall,2023,48,4046,4,17
+PH201,Electromagnetism,Physics,4,100,Spring,2023,47,4047,4,17
+PH201,Electromagnetism,Physics,4,100,Fall,2024,48,4048,4,17
+PH201,Electromagnetism,Physics,4,100,Spring,2024,57,4049,4,17
+PH201,Electromagnetism,Physics,4,100,Fall,2025,56,4050,4,17
+PH201,Electromagnetism,Physics,4,100,Spring,2025,64,4051,4,17
+PH301,Thermodynamics,Physics,4,60,Fall,2023,60,4046,4,18
+PH301,Thermodynamics,Physics,4,60,Spring,2023,60,4047,4,18
+PH301,Thermodynamics,Physics,4,60,Fall,2024,60,4048,4,18
+PH301,Thermodynamics,Physics,4,60,Spring,2024,60,4049,4,18
+PH301,Thermodynamics,Physics,4,60,Fall,2025,60,4050,4,18
+PH301,Thermodynamics,Physics,4,60,Spring,2025,60,4051,4,18
+BU101,Accounting,Business,4,80,Fall,2023,53,4046,0,0
+BU101,Accounting,Business,4,80,Spring,2023,56,4047,0,0
+BU101,Accounting,Business,4,80,Fall,2024,57,4048,0,0
+BU101,Accounting,Business,4,80,Spring,2024,66,4049,0,0
+BU101,Accounting,Business,4,80,Fall,2025,68,4050,0,0
+BU101,Accounting,Business,4,80,Spring,2025,65,4051,0,0
+BU201,Marketing,Business,3,60,Fall,2023,35,4046,0,1
+BU201,Marketing,Business,3,60,Spring,2023,37,4047,0,1
+BU201,Marketing,Business,3,60,Fall,2024,40,4048,0,1
+BU201,Marketing,Business,3,60,Spring,2024,52,4049,0,1
+BU201,Marketing,Business,3,60,Fall,2025,48,4050,0,1
+BU201,Marketing,Business,3,60,Spring,2025,42,4051,0,1
+BU301,Finance,Business,3,80,Fall,2023,41,4046,0,2
+BU301,Finance,Business,3,80,Spring,2023,47,4047,0,2
+BU301,Finance,Business,3,80,Fall,2024,45,4048,0,2
+BU301,Finance,Business,3,80,Spring,2024,61,4049,0,2
+BU301,Finance,Business,3,80,Fall,2025,57,4050,0,2
+BU301,Finance,Business,3,80,Spring,2025,54,4051,0,2
+BU401,Management,Business,3,80,Fall,2023,32,4046,0,3
+BU401,Management,Business,3,80,Spring,2023,36,4047,0,3
+BU401,Management,Business,3,80,Fall,2024,46,4048,0,3
+BU401,Management,Business,3,80,Spring,2024,48,4049,0,3
+BU401,Management,Business,3,80,Fall,2025,41,4050,0,3
+BU401,Management,Business,3,80,Spring,2025,53,4051,0,3
+EN101,Engineering Drawing,Engineering,4,80,Fall,2023,45,4046,2,9
+EN101,Engineering Drawing,Engineering,4,80,Spring,2023,43,4047,2,9
+EN101,Engineering Drawing,Engineering,4,80,Fall,2024,52,4048,2,9
+EN101,Engineering Drawing,Engineering,4,80,Spring,2024,55,4049,2,9
+EN101,Engineering Drawing,Engineering,4,80,Fall,2025,59,4050,2,9
+EN101,Engineering Drawing,Engineering,4,80,Spring,2025,57,4051,2,9
+EN201,Circuit Analysis,Engineering,4,100,Fall,2023,47,4046,2,10
+EN201,Circuit Analysis,Engineering,4,100,Spring,2023,53,4047,2,10
+EN201,Circuit Analysis,Engineering,4,100,Fall,2024,51,4048,2,10
+EN201,Circuit Analysis,Engineering,4,100,Spring,2024,51,4049,2,10
+EN201,Circuit Analysis,Engineering,4,100,Fall,2025,58,4050,2,10
+EN201,Circuit Analysis,Engineering,4,100,Spring,2025,68,4051,2,10
+EN301,Control Systems,Engineering,3,80,Fall,2023,28,4046,2,11
+EN301,Control Systems,Engineering,3,80,Spring,2023,31,4047,2,11
+EN301,Control Systems,Engineering,3,80,Fall,2024,30,4048,2,11
+EN301,Control Systems,Engineering,3,80,Spring,2024,42,4049,2,11
+EN301,Control Systems,Engineering,3,80,Fall,2025,43,4050,2,11
+EN301,Control Systems,Engineering,3,80,Spring,2025,58,4051,2,11
