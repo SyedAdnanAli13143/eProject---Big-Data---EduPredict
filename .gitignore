@@ -32,21 +32,6 @@ desktop.ini
 *.key
 secrets/
 
-# Data — keep folder structure but never commit raw data
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-*.csv.zip
-
-# ML artifacts
-ml/models/*.pkl
-ml/models/*.joblib
-ml/models/*.h5
-ml/models/*.pt
-ml/models/*.onnx
-!ml/models/.gitkeep
-
 # Docker / infra
 infrastructure/.volumes/
 *.log
