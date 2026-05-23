@@ -502,7 +502,7 @@ def team_progress():
             {
                 "name": "Muhammad Kashif Akhtar",
                 "role": "Member",
-                "share": "10%",
+                "share": "5%",
                 "focus": "Data Storage + Database Setup",
                 "tasks": [
                     {"task": "HDFS Setup & Partitioning", "status": "done", "folder": "infrastructure/"},
@@ -514,7 +514,7 @@ def team_progress():
             {
                 "name": "Bilal Ahmed",
                 "role": "Member",
-                "share": "10%",
+                "share": "5%",
                 "focus": "Documentation + Video Demo",
                 "tasks": [
                     {"task": "Technical Specification Document", "status": "pending", "folder": "Docs/"},
@@ -526,7 +526,7 @@ def team_progress():
             {
                 "name": "Shah Azzam",
                 "role": "Member",
-                "share": "10%",
+                "share": "5%",
                 "focus": "Testing + Support Module",
                 "tasks": [
                     {"task": "Test Data Preparation", "status": "pending", "folder": "data/"},
@@ -538,7 +538,7 @@ def team_progress():
             {
                 "name": "Syed Mohammad Ismail",
                 "role": "Member (Buffer)",
-                "share": "10%",
+                "share": "5%",
                 "focus": "Tableau Dashboards + Monitoring",
                 "tasks": [
                     {"task": "Tableau Dashboards", "status": "pending", "folder": "external"},

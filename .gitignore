@@ -1,45 +1,23 @@
-# # Python
-# __pycache__/
-# *.pyc
-# *.pyo
-# *.pyd
-# .Python
-# *.egg-info/
-# .eggs/
-# .venv/
-# venv/
-# env/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# # Jupyter
-# .ipynb_checkpoints/
+# Virtual environments
+.venv/
+venv/
+env/
 
-# # IDE
-# .vscode/
-# .idea/
-# *.swp
-# *.swo
+# IDE
+.vscode/
+.idea/
 
-# # OS
-# .DS_Store
-# Thumbs.db
-# desktop.ini
-
-# # Secrets / config
-# .env
-# .env.*
-# !.env.example
-# *.pem
-# *.key
-# secrets/
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # Docker / infra
 infrastructure/.volumes/
 *.log
-
-# # Tableau
-# *.twbx
-# dashboards/cache/
-
-# # Build / dist
-# build/
-# dist/
